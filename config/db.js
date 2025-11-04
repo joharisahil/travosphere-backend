@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI;
+  const uri = process.env.MONGO_URI_PROD;
   if (!uri) throw new Error('MONGO_URI not set in env');
 
   await mongoose.connect(uri, {
