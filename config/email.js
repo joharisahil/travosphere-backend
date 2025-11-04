@@ -1,19 +1,5 @@
-const nodemailer = require('nodemailer');
+// config/email.js
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT ? parseInt(process.env.EMAIL_PORT) : 587,
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-transporter.verify().then(() => {
-  console.log('Email transporter verified');
-}).catch((err) => {
-  console.warn('Warning: Email transporter verification failed', err.message);
-});
-
-module.exports = transporter;
+module.exports = resend;
