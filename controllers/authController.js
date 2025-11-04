@@ -53,19 +53,12 @@ async function sendOtp(req, res, next) {
       html
     };
 
-try {
-  await transporter.emails.send({
-    from: process.env.EMAIL_FROM || 'YourApp <onboarding@resend.dev>',
-    to: normalizedEmail,
-    subject,
-    html,
-  });
+    await transporter.sendMail(mailOptions).catch(err => {
+      console.warn('Email send failed', err.message);
+      // don't fail user creation for email issues, but inform them
+      return res.status(500).json({ message: 'Failed to send OTP email. Check email settings.' });
+    });
 
-  return res.json({ message: 'OTP sent to email', email: normalizedEmail });
-} catch (err) {
-  console.error('Email send failed', err);
-  return res.status(500).json({ message: 'Failed to send OTP email. Check email settings.' });
-}
     return res.json({ message: 'OTP sent to email', email: normalizedEmail });
   } catch (err) {
     next(err);
